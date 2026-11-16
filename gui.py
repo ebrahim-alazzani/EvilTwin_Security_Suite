@@ -1,8 +1,8 @@
 """
 =============================================================================
- EvilTwin Security Suite - Cyber Modern GUI Edition
- Built with CustomTkinter & High-Tech Dark Cyberpunk Theme.
- Supports Full Arabic RTL Rendering, Live Real-Time Logs & Audio-Visual Alerts.
+ EvilTwin Security Suite - Cyber Modern GUI Edition (English Interface)
+ High-Tech Dark Cyberpunk Theme with CustomTkinter.
+ Real-Time Telemetry, Rogue AP Broadcasts & Wireless Threat Detector.
 =============================================================================
 """
 
@@ -12,11 +12,9 @@ import time
 import socket
 import threading
 import platform
-import subprocess
 import tkinter as tk
-from tkinter import messagebox, filedialog
+from tkinter import messagebox
 
-# Ensure local package path
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 if BASE_DIR not in sys.path:
     sys.path.insert(0, BASE_DIR)
@@ -31,7 +29,6 @@ except ImportError:
 from core.attacker import EvilTwinServer
 from core.detector import EvilTwinDetector
 
-# Set theme
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
@@ -39,21 +36,18 @@ class EvilTwinGUI(ctk.CTk):
     def __init__(self):
         super().__init__()
 
-        self.title("EvilTwin Security Suite | لوحة التحكم والأمن السيبراني")
-        self.geometry("1100x750")
+        self.title("EvilTwin Security Suite | Cyber Defense Center")
+        self.geometry("1120x760")
         self.minsize(980, 680)
 
-        # Server instance tracking
         self.server_instance = None
         self.server_thread = None
         self.is_server_running = False
 
-        # Build UI
         self._setup_grid()
         self._build_sidebar()
         self._build_main_container()
 
-        # Show Dashboard by default
         self.show_dashboard_view()
 
     def _setup_grid(self):
@@ -65,7 +59,6 @@ class EvilTwinGUI(ctk.CTk):
         self.sidebar_frame.grid(row=0, column=0, sticky="nsew")
         self.sidebar_frame.grid_rowconfigure(7, weight=1)
 
-        # Logo / Title
         self.logo_label = ctk.CTkLabel(
             self.sidebar_frame, 
             text="🛡️ EVIL TWIN\nSECURITY SUITE", 
@@ -74,59 +67,57 @@ class EvilTwinGUI(ctk.CTk):
         )
         self.logo_label.grid(row=0, column=0, padx=20, pady=(25, 20))
 
-        # Nav Buttons
         self.btn_dashboard = ctk.CTkButton(
-            self.sidebar_frame, text="📊 لوحة التحكم والمؤشرات", 
+            self.sidebar_frame, text="📊 Dashboard & Telemetry", 
             font=ctk.CTkFont(size=14, weight="bold"),
-            fg_color="#1f2937", hover_color="#374151", height=42,
+            fg_color="#1f2937", hover_color="#374151", height=42, anchor="w",
             command=self.show_dashboard_view
         )
         self.btn_dashboard.grid(row=1, column=0, padx=15, pady=8, sticky="ew")
 
         self.btn_attacker = ctk.CTkButton(
-            self.sidebar_frame, text="⚡ خادم محاكاة الهجوم (Rogue AP)", 
+            self.sidebar_frame, text="⚡ Rogue AP Simulator", 
             font=ctk.CTkFont(size=14, weight="bold"),
-            fg_color="#1f2937", hover_color="#b91c1c", height=42,
+            fg_color="#1f2937", hover_color="#b91c1c", height=42, anchor="w",
             command=self.show_attacker_view
         )
         self.btn_attacker.grid(row=2, column=0, padx=15, pady=8, sticky="ew")
 
         self.btn_detector = ctk.CTkButton(
-            self.sidebar_frame, text="🔍 كاشف وفاحص التوأم الشرير", 
+            self.sidebar_frame, text="🔍 Threat Detector", 
             font=ctk.CTkFont(size=14, weight="bold"),
-            fg_color="#1f2937", hover_color="#047857", height=42,
+            fg_color="#1f2937", hover_color="#047857", height=42, anchor="w",
             command=self.show_detector_view
         )
         self.btn_detector.grid(row=3, column=0, padx=15, pady=8, sticky="ew")
 
         self.btn_audit = ctk.CTkButton(
-            self.sidebar_frame, text="🌐 تدقيق كروت الشبكة والـ IP", 
+            self.sidebar_frame, text="🌐 Network Audit", 
             font=ctk.CTkFont(size=14, weight="bold"),
-            fg_color="#1f2937", hover_color="#374151", height=42,
+            fg_color="#1f2937", hover_color="#374151", height=42, anchor="w",
             command=self.show_audit_view
         )
         self.btn_audit.grid(row=4, column=0, padx=15, pady=8, sticky="ew")
 
         self.btn_logs = ctk.CTkButton(
-            self.sidebar_frame, text="📁 استعراض السجلات (Logs)", 
+            self.sidebar_frame, text="📁 Captured Logs", 
             font=ctk.CTkFont(size=14, weight="bold"),
-            fg_color="#1f2937", hover_color="#374151", height=42,
+            fg_color="#1f2937", hover_color="#374151", height=42, anchor="w",
             command=self.show_logs_view
         )
         self.btn_logs.grid(row=5, column=0, padx=15, pady=8, sticky="ew")
 
         self.btn_docs = ctk.CTkButton(
-            self.sidebar_frame, text="📖 الدليل التعليمي ونظريات الهجوم", 
+            self.sidebar_frame, text="📖 Documentation", 
             font=ctk.CTkFont(size=14, weight="bold"),
-            fg_color="#1f2937", hover_color="#374151", height=42,
+            fg_color="#1f2937", hover_color="#374151", height=42, anchor="w",
             command=self.show_docs_view
         )
         self.btn_docs.grid(row=6, column=0, padx=15, pady=8, sticky="ew")
 
-        # Bottom System Info
         self.lbl_system = ctk.CTkLabel(
             self.sidebar_frame,
-            text=f"OS: {platform.system()} {platform.release()}\nPython: {platform.python_version()}",
+            text=f"Platform: {platform.system()} {platform.release()}\nPython: {platform.python_version()}",
             font=ctk.CTkFont(size=11),
             text_color="#9ca3af"
         )
@@ -160,67 +151,63 @@ class EvilTwinGUI(ctk.CTk):
         scroll.grid(row=0, column=0, sticky="nsew", padx=25, pady=20)
         scroll.grid_columnconfigure((0, 1, 2), weight=1)
 
-        # Header Title
         title_box = ctk.CTkFrame(scroll, fg_color="#1f2937", corner_radius=12)
         title_box.grid(row=0, column=0, columnspan=3, sticky="ew", pady=(0, 20), padx=5)
 
         title = ctk.CTkLabel(
             title_box, 
-            text="⚡ لوحة المراقبة والأمن اللاسلكي | Wireless Security Intelligence",
+            text="⚡ Wireless Threat Intelligence & Evil Twin Simulation Dashboard",
             font=ctk.CTkFont(size=20, weight="bold"),
             text_color="#60a5fa"
         )
         title.pack(padx=20, pady=15, anchor="w")
 
-        # Metric Cards
-        card1 = self._create_metric_card(scroll, "حالة الخادم (Rogue AP)", "متوقف" if not self.is_server_running else "يعمل بنشاط", "#ef4444" if not self.is_server_running else "#10b981", 0)
-        card2 = self._create_metric_card(scroll, "منفذ المحاكاة الافتراضي", "Port: 22222", "#3b82f6", 1)
-        card3 = self._create_metric_card(scroll, "درجة الحماية والوعي", "High Defense Level", "#10b981", 2)
+        card1 = self._create_metric_card(scroll, "Rogue AP Status", "STOPPED" if not self.is_server_running else "ACTIVE / BROADCASTING", "#ef4444" if not self.is_server_running else "#10b981")
+        card2 = self._create_metric_card(scroll, "Simulation Port", "Port: 22222", "#3b82f6")
+        card3 = self._create_metric_card(scroll, "Defense & Integrity", "HIGH (Ready)", "#10b981")
 
         card1.grid(row=1, column=0, padx=8, pady=10, sticky="nsew")
         card2.grid(row=1, column=1, padx=8, pady=10, sticky="nsew")
         card3.grid(row=1, column=2, padx=8, pady=10, sticky="nsew")
 
-        # Quick Explanatory Banner
         info_frame = ctk.CTkFrame(scroll, fg_color="#0f172a", corner_radius=12, border_width=1, border_color="#334155")
         info_frame.grid(row=2, column=0, columnspan=3, sticky="ew", pady=15, padx=5)
 
         info_lbl = ctk.CTkLabel(
             info_frame,
             text=(
-                "🛡️ مرحباً بك في الإصدار المحدث لمنظومة EvilTwin Security Suite!\n\n"
-                "• تتيح لك المنظومة محاكاة نقطة وصول وهمية (Evil Twin AP) وبث شبكات استدراجية.\n"
-                "• يوفر الكاشف الذكي خوارزمية لمطابقة الـ SSID وفحص عناوين BSSID/MAC المتعددة واكتشاف أي انتحال في ثوانٍ.\n"
-                "• تم الحفاظ على كافة أرشيفات مشاريعك السابقة وتوثيقها بشكل آمن داخل المنظومة."
+                "🛡️ EvilTwin Security Suite - Professional Wireless Research Framework\n\n"
+                "• Simulates Rogue Access Points (Evil Twin APs) beaconing identical network SSIDs.\n"
+                "• Autonomous Threat Detector scans and detects BSSID/MAC anomalies in real-time.\n"
+                "• Historical versions and source evolution archived under 'archive_versions/' folder."
             ),
             font=ctk.CTkFont(size=14),
-            justify="right",
+            justify="left",
             text_color="#e2e8f0"
         )
         info_lbl.pack(padx=25, pady=20, fill="both")
 
-        # Action Buttons
         btn_box = ctk.CTkFrame(scroll, fg_color="transparent")
         btn_box.grid(row=3, column=0, columnspan=3, pady=10)
 
         ctk.CTkButton(
-            btn_box, text="🚀 تشغيل محاكاة الهجوم الآن", 
+            btn_box, text="🚀 Launch Attacker Server", 
             fg_color="#dc2626", hover_color="#b91c1c", width=220, height=45,
             font=ctk.CTkFont(size=14, weight="bold"),
             command=self.show_attacker_view
-        ).pack(side="right", padx=10)
+        ).pack(side="left", padx=10)
 
         ctk.CTkButton(
-            btn_box, text="🛡️ بدء فحص وكشف الشبكات", 
+            btn_box, text="🛡️ Run Threat Detector", 
             fg_color="#059669", hover_color="#047857", width=220, height=45,
             font=ctk.CTkFont(size=14, weight="bold"),
             command=self.show_detector_view
-        ).pack(side="right", padx=10)
+        ).pack(side="left", padx=10)
 
-    def _create_metric_card(self, parent, title, value, color, col):
+    def _create_metric_card(self, parent, title, value, color):
         card = ctk.CTkFrame(parent, fg_color="#111827", corner_radius=12, border_width=1, border_color="#1f2937")
         ctk.CTkLabel(card, text=title, font=ctk.CTkFont(size=13), text_color="#9ca3af").pack(padx=15, pady=(15, 5), anchor="w")
-        ctk.CTkLabel(card, text=value, font=ctk.CTkFont(size=18, weight="bold"), text_color=color).pack(padx=15, pady=(0, 15), anchor="w")
+        ctk.CTkLabel(card, text=value, font=ctk.CTkFont(size=17, weight="bold"), text_color=color).pack(padx=15, pady=(0, 15), anchor="w")
         return card
 
     # =========================================================================
@@ -233,24 +220,22 @@ class EvilTwinGUI(ctk.CTk):
         frame = ctk.CTkFrame(self.main_container, fg_color="transparent")
         frame.pack(fill="both", expand=True, padx=25, pady=20)
 
-        # Title
         ctk.CTkLabel(
-            frame, text="⚡ خادم محاكاة نقطة الوصول الوهمية (Rogue AP Simulator)",
+            frame, text="⚡ Rogue Access Point Simulator (Attacker Server)",
             font=ctk.CTkFont(size=20, weight="bold"), text_color="#f87171"
         ).pack(anchor="w", pady=(0, 10))
 
-        # Config Controls
         ctrl_box = ctk.CTkFrame(frame, fg_color="#1f2937", corner_radius=12)
         ctrl_box.pack(fill="x", pady=10)
 
-        ctk.CTkLabel(ctrl_box, text="رقم منفذ الخادم (Port):", font=ctk.CTkFont(size=13)).pack(side="right", padx=10, pady=15)
-        self.entry_port = ctk.CTkEntry(ctrl_box, width=100, justify="center")
+        ctk.CTkLabel(ctrl_box, text="Server Port:", font=ctk.CTkFont(size=13)).pack(side="left", padx=(15, 5), pady=15)
+        self.entry_port = ctk.CTkEntry(ctrl_box, width=90, justify="center")
         self.entry_port.insert(0, "22222")
-        self.entry_port.pack(side="right", padx=10, pady=15)
+        self.entry_port.pack(side="left", padx=5, pady=15)
 
         self.btn_toggle_server = ctk.CTkButton(
             ctrl_box, 
-            text="تشغيل الخادم 🚀" if not self.is_server_running else "إيقاف الخادم 🛑",
+            text="Start Server 🚀" if not self.is_server_running else "Stop Server 🛑",
             fg_color="#dc2626" if not self.is_server_running else "#4b5563",
             hover_color="#b91c1c" if not self.is_server_running else "#374151",
             font=ctk.CTkFont(size=14, weight="bold"),
@@ -260,19 +245,18 @@ class EvilTwinGUI(ctk.CTk):
 
         self.lbl_server_status = ctk.CTkLabel(
             ctrl_box, 
-            text="● الخادم غير نشط" if not self.is_server_running else "● الخادم يعمل ويستقبل الاتصالات...",
+            text="● Server Inactive" if not self.is_server_running else "● Server Active & Listening...",
             font=ctk.CTkFont(size=13, weight="bold"),
             text_color="#9ca3af" if not self.is_server_running else "#10b981"
         )
         self.lbl_server_status.pack(side="left", padx=10, pady=15)
 
-        # Live Console Log
-        ctk.CTkLabel(frame, text="سجل البث والتقاط البيانات الفوري (Live Broadcast Log):", font=ctk.CTkFont(size=14, weight="bold")).pack(anchor="w", pady=(15, 5))
+        ctk.CTkLabel(frame, text="Live Broadcast & Session Stream:", font=ctk.CTkFont(size=14, weight="bold")).pack(anchor="w", pady=(15, 5))
         self.txt_server_log = ctk.CTkTextbox(frame, fg_color="#030712", text_color="#22c55e", font=ctk.CTkFont(family="Consolas", size=13))
         self.txt_server_log.pack(fill="both", expand=True)
 
         if self.is_server_running:
-            self.txt_server_log.insert("end", "[+] الخادم قيد التشغيل بالفعل...\n")
+            self.txt_server_log.insert("end", "[+] Server is currently broadcasting simulated beacons...\n")
 
     def toggle_server(self):
         if not self.is_server_running:
@@ -280,17 +264,17 @@ class EvilTwinGUI(ctk.CTk):
             port = int(port_val) if port_val.isdigit() else 22222
             self.server_instance = EvilTwinServer(port=port)
             self.is_server_running = True
-            self.btn_toggle_server.configure(text="إيقاف الخادم 🛑", fg_color="#4b5563", hover_color="#374151")
-            self.lbl_server_status.configure(text="● الخادم يعمل ويستقبل الاتصالات...", text_color="#10b981")
+            self.btn_toggle_server.configure(text="Stop Server 🛑", fg_color="#4b5563", hover_color="#374151")
+            self.lbl_server_status.configure(text="● Server Active & Listening...", text_color="#10b981")
             
-            self.txt_server_log.insert("end", f"[*] تم بدء تشغيل خادم المحاكاة على المنفذ: {port}\n")
-            self.txt_server_log.insert("end", "[*] بانتظار استجابة وفحص الأجهزة وكاشف الشبكات...\n")
+            self.txt_server_log.insert("end", f"[*] Attacker Simulation Server started on port: {port}\n")
+            self.txt_server_log.insert("end", "[*] Broadcasting Rogue Evil Twin Beacons...\n")
 
             def run_server():
                 try:
                     self.server_instance.start()
                 except Exception as e:
-                    self.txt_server_log.insert("end", f"[!] خطأ في الخادم: {e}\n")
+                    self.txt_server_log.insert("end", f"[!] Server Exception: {e}\n")
 
             self.server_thread = threading.Thread(target=run_server, daemon=True)
             self.server_thread.start()
@@ -298,12 +282,12 @@ class EvilTwinGUI(ctk.CTk):
             if self.server_instance:
                 self.server_instance.stop()
             self.is_server_running = False
-            self.btn_toggle_server.configure(text="تشغيل الخادم 🚀", fg_color="#dc2626", hover_color="#b91c1c")
-            self.lbl_server_status.configure(text="● الخادم غير نشط", text_color="#9ca3af")
-            self.txt_server_log.insert("end", "[!] تم إيقاف الخادم بنجاح.\n")
+            self.btn_toggle_server.configure(text="Start Server 🚀", fg_color="#dc2626", hover_color="#b91c1c")
+            self.lbl_server_status.configure(text="● Server Inactive", text_color="#9ca3af")
+            self.txt_server_log.insert("end", "[!] Server stopped successfully.\n")
 
     # =========================================================================
-    # VIEW 3: Evil Twin Detector & Defender
+    # VIEW 3: Threat Detector
     # =========================================================================
     def show_detector_view(self):
         self._clear_main_container()
@@ -312,36 +296,33 @@ class EvilTwinGUI(ctk.CTk):
         frame = ctk.CTkFrame(self.main_container, fg_color="transparent")
         frame.pack(fill="both", expand=True, padx=25, pady=20)
 
-        # Title
         ctk.CTkLabel(
-            frame, text="🔍 كاشف ومحلل هجمات التوأم الشرير (Threat Detector)",
+            frame, text="🔍 Evil Twin Threat Detector & Network Defender",
             font=ctk.CTkFont(size=20, weight="bold"), text_color="#34d399"
         ).pack(anchor="w", pady=(0, 10))
 
-        # Target Config
         cfg_box = ctk.CTkFrame(frame, fg_color="#1f2937", corner_radius=12)
         cfg_box.pack(fill="x", pady=10)
 
-        ctk.CTkLabel(cfg_box, text="الهدف (Host / IP):", font=ctk.CTkFont(size=13)).pack(side="right", padx=(10, 5), pady=15)
-        self.entry_det_host = ctk.CTkEntry(cfg_box, width=130, justify="center")
+        ctk.CTkLabel(cfg_box, text="Target Host:", font=ctk.CTkFont(size=13)).pack(side="left", padx=(15, 5), pady=15)
+        self.entry_det_host = ctk.CTkEntry(cfg_box, width=120, justify="center")
         self.entry_det_host.insert(0, "127.0.0.1")
-        self.entry_det_host.pack(side="right", padx=5, pady=15)
+        self.entry_det_host.pack(side="left", padx=5, pady=15)
 
-        ctk.CTkLabel(cfg_box, text="المنفذ (Port):", font=ctk.CTkFont(size=13)).pack(side="right", padx=(15, 5), pady=15)
+        ctk.CTkLabel(cfg_box, text="Port:", font=ctk.CTkFont(size=13)).pack(side="left", padx=(15, 5), pady=15)
         self.entry_det_port = ctk.CTkEntry(cfg_box, width=80, justify="center")
         self.entry_det_port.insert(0, "22222")
-        self.entry_det_port.pack(side="right", padx=5, pady=15)
+        self.entry_det_port.pack(side="left", padx=5, pady=15)
 
         self.btn_scan = ctk.CTkButton(
-            cfg_box, text="بدء الفحص والتحليل 🛡️",
+            cfg_box, text="Run Security Scan 🛡️",
             fg_color="#059669", hover_color="#047857",
             font=ctk.CTkFont(size=14, weight="bold"),
             command=self.run_detector_scan
         )
         self.btn_scan.pack(side="left", padx=20, pady=15)
 
-        # Results Display
-        ctk.CTkLabel(frame, text="نتائج التحليل الأمني وكشف الشبكات الوهمية:", font=ctk.CTkFont(size=14, weight="bold")).pack(anchor="w", pady=(15, 5))
+        ctk.CTkLabel(frame, text="Network Anomaly Analysis & Rogue AP Detections:", font=ctk.CTkFont(size=14, weight="bold")).pack(anchor="w", pady=(15, 5))
         self.txt_det_log = ctk.CTkTextbox(frame, fg_color="#030712", text_color="#38bdf8", font=ctk.CTkFont(family="Consolas", size=13))
         self.txt_det_log.pack(fill="both", expand=True)
 
@@ -351,7 +332,7 @@ class EvilTwinGUI(ctk.CTk):
         port = int(port_val) if port_val.isdigit() else 22222
 
         self.txt_det_log.delete("1.0", "end")
-        self.txt_det_log.insert("end", f"[*] جاري الاتصال بالهدف: {host}:{port} لفحص الإشارات والـ Beacons...\n\n")
+        self.txt_det_log.insert("end", f"[*] Probing target host: {host}:{port} for beacon frames...\n\n")
 
         def task():
             try:
@@ -367,7 +348,7 @@ class EvilTwinGUI(ctk.CTk):
                 detector = EvilTwinDetector(target_host=host, target_port=port)
                 results = detector.analyze_networks(net_list)
 
-                self.txt_det_log.insert("end", "[+] تم استقبال بيانات الشبكات اللاسلكية بنجاح!\n")
+                self.txt_det_log.insert("end", "[+] Wireless Beacon Frames Received Successfully!\n")
                 self.txt_det_log.insert("end", "=" * 70 + "\n")
                 
                 alert_count = 0
@@ -379,30 +360,30 @@ class EvilTwinGUI(ctk.CTk):
 
                     if threat == "CRITICAL":
                         alert_count += 1
-                        self.txt_det_log.insert("end", f"\n🚨 [تنبيه أمني عالي الخطورة!]\n")
-                        self.txt_det_log.insert("end", f"  • الشبكة المنتحلة (SSID): {ssid}\n")
-                        self.txt_det_log.insert("end", f"  • عنوان الماك المكتشف (Rogue BSSID): {bssid}\n")
-                        self.txt_det_log.insert("end", f"  • التقييم: تم العثور على شبكة مكررة بنفس الاسم ولكن بعنوان MAC مختلف!\n")
-                        self.txt_det_log.insert("end", f"  • الإجراء الموصى به: قطع الاتصال فوراً وتفعيل WPA3/Enterprise.\n")
+                        self.txt_det_log.insert("end", f"\n🚨 [CRITICAL SECURITY ALERT!]\n")
+                        self.txt_det_log.insert("end", f"  * Impersonated Network (SSID) : {ssid}\n")
+                        self.txt_det_log.insert("end", f"  * Detected Rogue MAC (BSSID)  : {bssid}\n")
+                        self.txt_det_log.insert("end", f"  * Assessment                  : Multiple disparate BSSIDs detected for identical SSID!\n")
+                        self.txt_det_log.insert("end", f"  * Remediation                 : Disconnect immediately. Enforce WPA3/Enterprise.\n")
                     else:
-                        self.txt_det_log.insert("end", f"\n✅ [شبكة موثوقة / طبيعية]\n")
-                        self.txt_det_log.insert("end", f"  • اسم الشبكة (SSID): {ssid}\n")
-                        self.txt_det_log.insert("end", f"  • عنوان الماك (BSSID): {bssid}\n")
+                        self.txt_det_log.insert("end", f"\n✅ [VERIFIED / LEGITIMATE NETWORK]\n")
+                        self.txt_det_log.insert("end", f"  * Network SSID  : {ssid}\n")
+                        self.txt_det_log.insert("end", f"  * Router BSSID  : {bssid}\n")
                     self.txt_det_log.insert("end", "-" * 70 + "\n")
 
                 if alert_count > 0:
                     messagebox.showwarning(
-                        "تحذير أمني عاجل! (Evil Twin Alert)",
-                        f"تم اكتشاف {alert_count} نقطة وصول وهمية خبيثة (Evil Twin AP) تنتحل اسم الشبكة!"
+                        "Evil Twin Attack Detected!",
+                        f"CRITICAL WARNING:\nDetected {alert_count} Rogue Access Point(s) impersonating legitimate network SSIDs!"
                     )
             except Exception as e:
-                self.txt_det_log.insert("end", f"[!] فشل الاتصال بالخادم ({host}:{port}): {e}\n")
-                self.txt_det_log.insert("end", "[-] تأكد من تشغيل 'Attacker Server' أولاً من الشاشة المجاورة.\n")
+                self.txt_det_log.insert("end", f"[!] Connection failed ({host}:{port}): {e}\n")
+                self.txt_det_log.insert("end", "[-] Make sure the 'Rogue AP Simulator' is running first.\n")
 
         threading.Thread(target=task, daemon=True).start()
 
     # =========================================================================
-    # VIEW 4: Network & Hardware Audit
+    # VIEW 4: Network Audit
     # =========================================================================
     def show_audit_view(self):
         self._clear_main_container()
@@ -412,7 +393,7 @@ class EvilTwinGUI(ctk.CTk):
         frame.pack(fill="both", expand=True, padx=25, pady=20)
 
         ctk.CTkLabel(
-            frame, text="🌐 تدقيق محولات وكروت الشبكة (Network Interface Audit)",
+            frame, text="🌐 Network Interface & System Telemetry Audit",
             font=ctk.CTkFont(size=20, weight="bold"), text_color="#60a5fa"
         ).pack(anchor="w", pady=(0, 10))
 
@@ -425,9 +406,9 @@ class EvilTwinGUI(ctk.CTk):
         except Exception:
             local_ip = "127.0.0.1"
 
-        txt_audit.insert("end", f"[*] اسم الجهاز (Hostname): {hostname}\n")
-        txt_audit.insert("end", f"[*] عنوان IP المحلي الرئيسي: {local_ip}\n")
-        txt_audit.insert("end", f"[*] نظام التشغيل: {platform.system()} {platform.release()} ({platform.machine()})\n")
+        txt_audit.insert("end", f"[*] Hostname          : {hostname}\n")
+        txt_audit.insert("end", f"[*] Primary Local IP  : {local_ip}\n")
+        txt_audit.insert("end", f"[*] OS Architecture   : {platform.system()} {platform.release()} ({platform.machine()})\n")
         txt_audit.insert("end", "=" * 75 + "\n\n")
 
         if psutil:
@@ -435,18 +416,18 @@ class EvilTwinGUI(ctk.CTk):
             stats = psutil.net_if_stats()
             for iface, addr_list in addrs.items():
                 stat = stats.get(iface)
-                status_str = "متصل ✅ (UP)" if (stat and stat.isup) else "غير متصل ❌ (DOWN)"
+                status_str = "CONNECTED [UP]" if (stat and stat.isup) else "DISCONNECTED [DOWN]"
                 speed = f"{stat.speed}Mbps" if (stat and stat.speed > 0) else "N/A"
-                txt_audit.insert("end", f"• البطاقة: {iface} [{status_str} | السرعة: {speed}]\n")
+                txt_audit.insert("end", f"* Adapter: {iface} [{status_str} | Speed: {speed}]\n")
                 for a in addr_list:
                     family = "IPv4" if a.family == socket.AF_INET else ("MAC" if hasattr(psutil, 'AF_LINK') and a.family == psutil.AF_LINK else str(a.family))
                     txt_audit.insert("end", f"    - {family}: {a.address}\n")
                 txt_audit.insert("end", "\n")
         else:
-            txt_audit.insert("end", "[!] مكتبة psutil غير متوفرة لعرض كروت الشبكة كاملة.\n")
+            txt_audit.insert("end", "[!] 'psutil' is not available for full adapter enumeration.\n")
 
     # =========================================================================
-    # VIEW 5: Logs Viewer
+    # VIEW 5: Captured Logs
     # =========================================================================
     def show_logs_view(self):
         self._clear_main_container()
@@ -456,7 +437,7 @@ class EvilTwinGUI(ctk.CTk):
         frame.pack(fill="both", expand=True, padx=25, pady=20)
 
         ctk.CTkLabel(
-            frame, text="📁 استعراض سجلات جلسات الاتصال الملتقطة (Captured Logs)",
+            frame, text="📁 Captured Session Logs (Logs Viewer)",
             font=ctk.CTkFont(size=20, weight="bold"), text_color="#fbbf24"
         ).pack(anchor="w", pady=(0, 10))
 
@@ -468,21 +449,21 @@ class EvilTwinGUI(ctk.CTk):
 
         log_files = [f for f in os.listdir(log_dir) if f.endswith('.log') or f.endswith('.txt')]
         if not log_files:
-            txt_logs.insert("end", "[-] لا توجد ملفات سجلات مخزنة حتى الآن.\nسيتم تسجيل أي جلسة اتصال جديدة تلقائياً هنا بمجرد تشغيل خادم المحاكاة.")
+            txt_logs.insert("end", "[-] No session log files found.\nAny connection capture will be recorded automatically here.")
         else:
-            txt_logs.insert("end", f"[+] تم العثور على {len(log_files)} ملف سجل:\n\n")
+            txt_logs.insert("end", f"[+] Found {len(log_files)} log file(s):\n\n")
             for lf in log_files:
                 fp = os.path.join(log_dir, lf)
-                txt_logs.insert("end", f"=== ملف السجل: {lf} (الحجم: {os.path.getsize(fp)} بايت) ===\n")
+                txt_logs.insert("end", f"=== File: {lf} ({os.path.getsize(fp)} bytes) ===\n")
                 try:
                     with open(fp, 'r', encoding='utf-8', errors='ignore') as f:
                         txt_logs.insert("end", f.read())
                 except Exception as e:
-                    txt_logs.insert("end", f"[خطأ في القراءة: {e}]\n")
-                txt_logs.insert("end", "\n" + "=" * 60 + "\n\n")
+                    txt_logs.insert("end", f"[Error reading file: {e}]\n")
+                txt_logs.insert("end", "\n" + "=" * 65 + "\n\n")
 
     # =========================================================================
-    # VIEW 6: Educational Guide & Theory
+    # VIEW 6: Documentation
     # =========================================================================
     def show_docs_view(self):
         self._clear_main_container()
@@ -492,7 +473,7 @@ class EvilTwinGUI(ctk.CTk):
         frame.pack(fill="both", expand=True, padx=25, pady=20)
 
         ctk.CTkLabel(
-            frame, text="📖 الدليل الأكاديمي الشامل | آلية هجوم التوأم الشرير والدفاع عنه",
+            frame, text="📖 Documentation & Theoretical Concepts",
             font=ctk.CTkFont(size=20, weight="bold"), text_color="#a78bfa"
         ).pack(anchor="w", pady=(0, 10))
 
@@ -500,23 +481,25 @@ class EvilTwinGUI(ctk.CTk):
         txt_docs.pack(fill="both", expand=True)
 
         docs_content = """
-1. ما هو هجوم التوأم الشرير (Evil Twin Attack)؟
-   • هو هجوم سيبراني لاسلكي يقوم فيه المهاجم بزرع نقطة وصول واي فاي (Rogue Access Point) مزيفة.
-   • تحمل نقطة الوصول المزيفة نفس اسم الشبكة الشرعية تماماً (SSID).
+1. What is an Evil Twin Attack?
+   • A cyber wireless attack where an adversary deploys a rogue Wi-Fi Access Point (AP).
+   • The rogue AP broadcasts the exact same Service Set Identifier (SSID) as a legitimate network.
 
-2. كيف يتم استدراج وخداع الضحايا؟
-   • تعتمد بطاقات الشبكة والهواتف على الاتصال التلقائي بأقوى إشارة بث تحمل نفس الاسم المحفوظ.
-   • يقوم المهاجم أحياناً بإرسال حزم إلغاء مصادقة (Deauthentication Frames) لفصل الضحية عن الراوتر الأصلي وإجباره على التحويل إلى التوأم الشرير.
-   • بمجرد اتصال الضحية، يمرر المهاجم البيانات عبره كـ Man-in-the-Middle لاعتراضها وسرقتها.
+2. Exploitation Mechanics:
+   • Client wireless cards associate with whichever AP provides the strongest signal.
+   • Attackers can broadcast 802.11 Deauthentication packets to forcibly kick victims off 
+     the genuine router, pushing them into the rogue AP trap.
+   • The attacker acts as a Man-in-the-Middle (MitM), snooping and intercepting unencrypted data.
 
-3. خوارزمية الكشف الذاتي في هذه المنظومة (Detection Logic):
-   • تقوم المنظومة بفحص جميع إشارات البث وحفظ زوج (SSID, BSSID).
-   • في حال رصد نفس الـ SSID مكرراً مع أكثر من عنوان BSSID (MAC Address) مختلف، يطلق النظام إنذاراً أحمر باحتمالية وجود هجوم توأم شرير نشط.
+3. Detection Logic:
+   • The detector scans local wireless beacons and pairs (SSID, BSSID).
+   • If multiple distinct BSSIDs (MAC addresses) are registered for the same SSID within 
+     the coverage vicinity, the engine flags an immediate Rogue AP / Evil Twin alert.
 
-4. سبل الحماية والوقاية (Countermeasures):
-   • تجنب الاتصال بالشبكات العامة المفتوحة دون تفعيل VPN مشفر.
-   • الترقية إلى معايير WPA3 الحديثة التي تمنع هجمات انتحال الـ Handshake وإلغاء المصادقة.
-   • تثبيت وتفعيل أنظمة كشف التسلل اللاسلكي (Wireless Intrusion Prevention Systems - WIPS).
+4. Recommended Defenses:
+   • Utilize WPA3-Personal or 802.1X Enterprise authentication.
+   • Enforce end-to-end encrypted VPN tunnels over public hotspots.
+   • Deploy Wireless Intrusion Detection Systems (WIDS/WIPS).
 """
         txt_docs.insert("end", docs_content.strip())
 
